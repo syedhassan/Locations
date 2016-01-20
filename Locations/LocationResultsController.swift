@@ -33,6 +33,9 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.tableView.tableFooterView = UIView(frame: CGRectZero)
+        self.tableView.layoutMargins = UIEdgeInsetsZero
+        self.tableView.separatorInset = UIEdgeInsetsZero
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: Selector("showActionSheet"))
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didBecomeActive", name: UIApplicationDidBecomeActiveNotification, object: nil)
         fetchLocationData()
@@ -98,6 +101,7 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
         let loc = self.items[indexPath.row]
         cell.textLabel?.text = loc.locationName!
         
+        cell.layoutMargins = UIEdgeInsetsZero
         return cell
     }
     
