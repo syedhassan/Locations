@@ -24,6 +24,7 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
         super.init(style: UITableViewStyle.Plain)
         self.locationManager = CLLocationManager()
         self.locationManager.requestWhenInUseAuthorization()
+        self.title = "Locations"
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -32,13 +33,29 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        self.tableView.tableFooterView = UIView(frame: CGRectZero)
-        self.tableView.layoutMargins = UIEdgeInsetsZero
-        self.tableView.separatorInset = UIEdgeInsetsZero
+        configureTableView()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: Selector("showActionSheet"))
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didBecomeActive", name: UIApplicationDidBecomeActiveNotification, object: nil)
-        fetchLocationData()
+        RequestService().requestLocations(self.userLocation,
+            onSuccess: { result -> Void in
+                if result.count > 0 {
+                    self.items += result
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.tableView.reloadData()
+                    })
+                }
+            }, onFailure: { (error) -> Void in
+                print(error)
+            })
+    }
+    
+    func configureTableView() {
+        self.tableView.registerClass(CustomTableViewCell.self, forCellReuseIdentifier: "cell")
+        self.tableView.tableFooterView = UIView()
+        self.tableView.layoutMargins = UIEdgeInsetsZero
+        self.tableView.separatorInset = UIEdgeInsetsZero
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 100 //Estimated for dynamic cells
     }
     
     func showActionSheet() {
@@ -96,12 +113,12 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+        let cell = self.tableView.dequeueReusableCellWithIdentifier("cell") as! CustomTableViewCell
+        cell.layoutMargins = UIEdgeInsetsZero
         
         let loc = self.items[indexPath.row]
-        cell.textLabel?.text = loc.locationName!
+        cell.updateWithLocation(loc)
         
-        cell.layoutMargins = UIEdgeInsetsZero
         return cell
     }
     
@@ -116,41 +133,6 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
     
     func modalCancelled() {
          self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func fetchLocationData() {
-        let request = NSURLRequest(URL: NSURL(string: "http://localsearch.azurewebsites.net/api/Locations")!)
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        let task = session.dataTaskWithRequest(request, completionHandler: dataTaskCompletionHandler)
-        task.resume()
-    }
-    
-    func dataTaskCompletionHandler(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void {
-        guard let responseJSON = (try? NSJSONSerialization.JSONObjectWithData(data!, options: [])) as? [AnyObject] else {
-            print("Code = \(error?.code) and Info = \(error?.userInfo)")
-            return
-        }
-        
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
-        
-        for location in responseJSON {
-            if let location = location as? [String : AnyObject] {
-                let storeLocation = CLLocation(latitude: location["Latitude"] as! Double, longitude: location["Longitude"] as! Double)
-                let userLocation = CLLocation(latitude: self.userLocation.latitude, longitude: self.userLocation.longitude)
-                
-                items.append(Location(locationID: location["ID"] as? String,
-                                      locationName: location["Name"] as? String,
-                                      latitude: location["Latitude"] as? Double,
-                                      longitude: location["Longitude"] as? Double,
-                                      address: location["Address"] as? String,
-                                      arrivalTime: dateFormatter.dateFromString(location["ArrivalTime"] as! String),
-                                      distance: storeLocation.distanceFromLocation(userLocation)))
-            }
-        }
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.tableView.reloadData()
-        })
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

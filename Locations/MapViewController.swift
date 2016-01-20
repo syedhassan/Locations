@@ -47,12 +47,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         annotation1.title = self.storeLocation.locationName
         mapView.addAnnotation(annotation1)
         
+        mapView.selectAnnotation(annotation1, animated: false)
+        
         let annotation2 = MKPointAnnotation()
         annotation2.coordinate = self.userLocation
         annotation2.title = "Your Location"
         mapView.addAnnotation(annotation2)
         
-        self.mapView.showAnnotations(self.mapView.annotations, animated: true)
+        mapView.showAnnotations(self.mapView.annotations, animated: true)
     }
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {

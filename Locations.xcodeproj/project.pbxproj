@@ -17,6 +17,7 @@
 		997891F41C4F2C1B00B5B5E3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 997891F31C4F2C1B00B5B5E3 /* CoreLocation.framework */; };
 		997891F71C4F5A0B00B5B5E3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997891F61C4F5A0B00B5B5E3 /* MapViewController.swift */; };
 		997891F91C4F5A2300B5B5E3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 997891F81C4F5A2300B5B5E3 /* MapKit.framework */; };
+		999D59C21C500B57000104C4 /* RequestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999D59C11C500B56000104C4 /* RequestService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		997891F31C4F2C1B00B5B5E3 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		997891F61C4F5A0B00B5B5E3 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		997891F81C4F5A2300B5B5E3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		999D59C11C500B56000104C4 /* RequestService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				997891F11C4F292D00B5B5E3 /* CustomTableViewCell.swift */,
 				997891C81C4F020B00B5B5E3 /* Assets.xcassets */,
 				997891CD1C4F020B00B5B5E3 /* Info.plist */,
+				999D59C11C500B56000104C4 /* RequestService.swift */,
 			);
 			path = Locations;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				997891C41C4F020B00B5B5E3 /* LocationResultsController.swift in Sources */,
+				999D59C21C500B57000104C4 /* RequestService.swift in Sources */,
 				997891F01C4F087300B5B5E3 /* Location.swift in Sources */,
 				997891F21C4F292D00B5B5E3 /* CustomTableViewCell.swift in Sources */,
 				997891F71C4F5A0B00B5B5E3 /* MapViewController.swift in Sources */,
@@ -485,6 +489,7 @@
 				997891E81C4F020B00B5B5E3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		997891E91C4F020B00B5B5E3 /* Build configuration list for PBXNativeTarget "LocationsTests" */ = {
 			isa = XCConfigurationList;
@@ -493,6 +498,7 @@
 				997891EB1C4F020B00B5B5E3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		997891EC1C4F020B00B5B5E3 /* Build configuration list for PBXNativeTarget "LocationsUITests" */ = {
 			isa = XCConfigurationList;
@@ -501,6 +507,7 @@
 				997891EE1C4F020B00B5B5E3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
