@@ -34,7 +34,9 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTableView()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: Selector("showActionSheet"))
+        let barButton = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: Selector("showActionSheet"))
+        barButton.accessibilityIdentifier = "actionButton"
+        self.navigationItem.rightBarButtonItem = barButton
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didBecomeActive", name: UIApplicationDidBecomeActiveNotification, object: nil)
         RequestService().requestLocations(self.userLocation,
             onSuccess: { result -> Void in

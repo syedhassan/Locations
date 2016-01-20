@@ -16,6 +16,7 @@ class CustomTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .None
         backgroundColor = .clearColor()
+        accessibilityIdentifier = "Custom Cell"
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -51,6 +52,7 @@ class CustomTableViewCell: UITableViewCell {
     private lazy var locationName : UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir", size: 16)
+        label.accessibilityIdentifier = "locationName"
         label.textAlignment = NSTextAlignment.Left
         label.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(label)
@@ -60,6 +62,7 @@ class CustomTableViewCell: UITableViewCell {
     private lazy var distanceFromCurrentLocation : UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir", size: 13)
+        label.accessibilityIdentifier = "locationDistance"
         label.numberOfLines = 0
         label.lineBreakMode = .ByWordWrapping
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -70,6 +73,7 @@ class CustomTableViewCell: UITableViewCell {
     private lazy var arrivalTime : UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir", size: 12)
+        label.accessibilityIdentifier = "locationTime"
         label.textAlignment = NSTextAlignment.Center
         label.numberOfLines = 0
         label.lineBreakMode = .ByWordWrapping
