@@ -9,9 +9,9 @@
 import UIKit
 import CoreLocation
 
-class LocationResultsController: UITableViewController, CLLocationManagerDelegate  {
+public class LocationResultsController: UITableViewController, CLLocationManagerDelegate  {
 
-    var items = [Location]()
+    public var items = [Location]()
     var locationManager : CLLocationManager!
     //Defaulting to downtown Chicago!
     var userLocation = CLLocationCoordinate2D(latitude: 41.882030, longitude: -87.627889)
@@ -27,18 +27,22 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
         self.title = "Locations"
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureTableView()
         let barButton = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: Selector("showActionSheet"))
         barButton.accessibilityIdentifier = "actionButton"
         self.navigationItem.rightBarButtonItem = barButton
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didBecomeActive", name: UIApplicationDidBecomeActiveNotification, object: nil)
-        RequestService().requestLocations(self.userLocation,
+        getLocations(RequestService())
+    }
+    
+    func getLocations(requestService : RequestService) {
+        requestService.requestLocations(self.userLocation,
             onSuccess: { result -> Void in
                 if result.count > 0 {
                     self.items += result
@@ -48,7 +52,7 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
                 }
             }, onFailure: { (error) -> Void in
                 print(error)
-            })
+        })
     }
     
     func configureTableView() {
@@ -110,11 +114,11 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
         }
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.items.count;
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCellWithIdentifier("cell") as! CustomTableViewCell
         cell.layoutMargins = UIEdgeInsetsZero
         
@@ -124,7 +128,7 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let signInViewController:MapViewController = MapViewController(usrLocation: self.userLocation, strLocation: self.items[indexPath.row])
         let navigationController = UINavigationController(rootViewController: signInViewController)
         navigationController.modalTransitionStyle = .CoverVertical
@@ -137,12 +141,12 @@ class LocationResultsController: UITableViewController, CLLocationManagerDelegat
          self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         self.userLocation = manager.location!.coordinate
         print("locations = \(self.userLocation.latitude) \(self.userLocation.longitude)")
     }
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    public func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         switch (error.code)  {
         case CLError.Denied.rawValue :
             print("User didn't authorize location updates!")

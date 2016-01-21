@@ -8,8 +8,8 @@
 
 import UIKit
 
-struct Location {
-    let locationID: String?
+public struct Location {
+    let locationID: Int?
     let locationName: String?
     let latitude: Double?
     let longitude: Double?
@@ -22,3 +22,8 @@ struct Location {
     }
 }
 
+extension Location: Equatable{}
+
+public func == (lhs: Location, rhs: Location) -> Bool {
+    return lhs.locationID == rhs.locationID
+}

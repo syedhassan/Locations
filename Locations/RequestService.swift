@@ -24,28 +24,34 @@ class RequestService: NSObject {
                 return
             }
             
-            var items = [Location]()
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
-            
-            for location in responseJSON {
-                if let location = location as? [String : AnyObject] {
-                    let storeLocation = CLLocation(latitude: location["Latitude"] as! Double, longitude: location["Longitude"] as! Double)
-                    let userLocation = CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
-                    
-                    items.append(Location(locationID: location["ID"] as? String,
-                        locationName: location["Name"] as? String,
-                        latitude: location["Latitude"] as? Double,
-                        longitude: location["Longitude"] as? Double,
-                        address: location["Address"] as? String,
-                        arrivalTime: dateFormatter.dateFromString(location["ArrivalTime"] as! String),
-                        distance: storeLocation.distanceFromLocation(userLocation)))
-                }
-            }
+            let items = self.parseResponseJSON(userLocation, responseJSON: responseJSON)
             onSuccess(result: items)
         }
         
         let task = session.dataTaskWithRequest(request, completionHandler: dataTaskCompletionHandler)
         task.resume()
     }
+    
+    func parseResponseJSON(userLocation: CLLocationCoordinate2D, responseJSON: [AnyObject]) -> [Location] {
+        var items = [Location]()
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+        
+        for location in responseJSON {
+            if let location = location as? [String : AnyObject] {
+                let storeLocation = CLLocation(latitude: location["Latitude"] as! Double, longitude: location["Longitude"] as! Double)
+                let userLocation = CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
+                
+                items.append(Location(locationID: location["ID"] as? Int,
+                    locationName: location["Name"] as? String,
+                    latitude: location["Latitude"] as? Double,
+                    longitude: location["Longitude"] as? Double,
+                    address: location["Address"] as? String,
+                    arrivalTime: dateFormatter.dateFromString(location["ArrivalTime"] as! String),
+                    distance: storeLocation.distanceFromLocation(userLocation)))
+            }
+        }
+        return items
+    }
+    
 }
